@@ -4,6 +4,7 @@ public class Game {
     private String name;
     private String packageName;
     private String notes;
+    private boolean exempt = false;
 
     public Game() {}
 
@@ -11,6 +12,13 @@ public class Game {
         this.name = name;
         this.packageName = packageName;
         this.notes = notes;
+    }
+
+    public Game(String name, String packageName, String notes, boolean exempt) {
+        this.name = name;
+        this.packageName = packageName;
+        this.notes = notes;
+        this.exempt = exempt;
     }
 
     public String getName() { return name; }
@@ -22,8 +30,11 @@ public class Game {
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 
+    public boolean isExempt() { return exempt; }
+    public void setExempt(boolean exempt) { this.exempt = exempt; }
+
     @Override
     public String toString() {
-        return "Game{name='" + name + "', packageName='" + packageName + "', notes='" + notes + "'}";
+        return "Game{name='" + name + "', packageName='" + packageName + "', notes='" + notes + "', exempt=" + exempt + "}";
     }
 }
