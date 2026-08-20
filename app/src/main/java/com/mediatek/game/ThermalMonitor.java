@@ -139,34 +139,15 @@ public class ThermalMonitor {
         }
         
         // Battery stats (requires context)
-        if (context != null && batteryManager != null) {
+        if (context != null) {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    // API 33+: Try to use BatteryManager properties
-                    try {
-                        stats.batteryHealth = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_HEALTH);
-                        stats.batteryStatus = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_STATUS);
-                        stats.batteryVoltage = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_VOLTAGE);
-                    } catch (Exception e) {
-                        Log.d(TAG, "BatteryManager properties not available, using fallback");
-                        // Fallback to Intent-based battery info
-                        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                        Intent batteryStatus = context.registerReceiver(null, ifilter);
-                        if (batteryStatus != null) {
-                            stats.batteryHealth = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
-                            stats.batteryStatus = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                            stats.batteryVoltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
-                        }
-                    }
-                } else {
-                    // Fallback: Use Intent-based battery info for older APIs
-                    IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                    Intent batteryStatus = context.registerReceiver(null, ifilter);
-                    if (batteryStatus != null) {
-                        stats.batteryHealth = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
-                        stats.batteryStatus = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                        stats.batteryVoltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
-                    }
+                // Use Intent-based battery info for all API levels
+                IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+                Intent batteryStatus = context.registerReceiver(null, ifilter);
+                if (batteryStatus != null) {
+                    stats.batteryHealth = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
+                    stats.batteryStatus = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+                    stats.batteryVoltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
                 }
             } catch (Exception e) {
                 Log.w(TAG, "Failed to read battery manager", e);
