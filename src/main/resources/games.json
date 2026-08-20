@@ -1,4 +1,4 @@
 [
-  {"name":"Speed Drifters","package":"com.garena.game.fctw","notes":"120Hz/120FPS, anti-lag"},
-  {"name":"QQ飞车","package":"com.tencent.tmgp.speedmobile","notes":"120Hz/120FPS, anti-lag"}
+  {"name":"Speed Drifters","package":"com.garena.game.fctw","notes":"120Hz/120FPS, anti-lag","exempt":true},
+  {"name":"QQ飞车","package":"com.tencent.tmgp.speedmobile","notes":"120Hz/120FPS, anti-lag","exempt":true}
 ]
