@@ -23,9 +23,6 @@
     
     <!-- Memory and process monitoring -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-    
-    <!-- Runtime permissions for API 31+ -->
-    <uses-permission-sdk-33 android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name="com.mediatek.game.GameApplication"
