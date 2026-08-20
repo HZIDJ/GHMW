@@ -1,21 +1,92 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-  <application
-    android:name="com.mediatek.game.GameApplication"
-    android:theme="@style/AppTheme"
-    android:label="Game Helio G100">
-    <meta-data
-      android:name="com.mediatek.game.GAMEPLAY_ACTIVITY"
-      android:value=".GameplayActivity" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mediatek.game">
 
-    <activity android:name=".MainActivity" android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
+    <!-- System permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    
+    <!-- Notification permissions (Android 13+ / API 33+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+    <!-- Performance monitoring permissions -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
+    
+    <!-- Battery and thermal monitoring -->
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    
+    <!-- Memory and process monitoring -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    
+    <!-- Runtime permissions for API 31+ -->
+    <uses-permission-sdk-33 android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <activity android:name=".SettingsActivity" android:exported="false" />
+    <application
+        android:name="com.mediatek.game.GameApplication"
+        android:theme="@style/AppTheme"
+        android:label="Game Helio G100"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
 
-  </application>
+        <meta-data
+            android:name="com.mediatek.game.GAMEPLAY_ACTIVITY"
+            android:value=".GameplayActivity" />
+
+        <!-- Main activity -->
+        <activity 
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Settings activity -->
+        <activity 
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- Gameplay activity -->
+        <activity 
+            android:name=".GameplayActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- Notification channels metadata -->
+        <service android:name=".services.NotificationService" />
+        <service android:name=".services.PerformanceMonitorService" />
+        <service android:name=".services.PermissionService" />
+
+        <!-- Broadcast receivers for system events -->
+        <receiver
+            android:name=".receivers.BatteryReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BATTERY_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receivers.ThermalReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.THERMAL_EVENT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
 </manifest>
