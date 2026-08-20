@@ -39,7 +39,7 @@
 -keep interface ** { *; }
 -keep interface * { *; }
 -keepclassmembers interface ** { *; }
--keepclassandmembers class * implements ** { *; }
+-keep class * implements ** { *; }
 
 # ===== KEEP ALL ENUMS =====
 -keepclassmembers enum * {
