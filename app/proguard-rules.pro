@@ -1,17 +1,12 @@
-# ProGuard rules for HGID - Full Preservation Configuration
-# Comprehensive rules for FPS Meter, Performance Monitoring, Network Monitoring, 
-# Thermal/Temperature Monitoring, Runtime Permissions, and Real-time Updates
+# ProGuard rules for HGID - Notification and Permission Support
+# Comprehensive rules for Game Performance Monitoring with Notification Support
 
-# ===== GLOBAL PRESERVATION - KEEP EVERYTHING BY DEFAULT =====
--dontshrink
--dontoptimize
--dontobfuscate
--dontwarn
+# ===== OPTIMIZE FOR PERFORMANCE MONITORING =====
+-optimizationpasses 5
+-allowaccessmodification
+-mergeinterfacesaggressively
 
-# Verbose output for debugging
--verbose
-
-# ===== KEEP ALL ATTRIBUTES =====
+# ===== PRESERVE ESSENTIAL ATTRIBUTES =====
 -keepattributes *
 -keepattributes SourceFile,LineNumberTable
 -keepattributes Exceptions
@@ -27,31 +22,93 @@
 -keepattributes RuntimeInvisibleParameterAnnotations
 -keepattributes Synthetic
 -keepattributes Metadata
--keepattributes LineNumberTable
 -renamesourcefileattribute SourceFile
 
-# ===== KEEP ALL APPLICATION CLASSES =====
--keep class ** { *; }
--keepclassmembers class ** { *; }
--keepclasseswithmembers class ** { *; }
+# ===== VERBOSE DEBUGGING =====
+-verbose
+-printmapping mapping.txt
+-printconfiguration configuration.txt
 
-# ===== KEEP ALL INTERFACES AND IMPLEMENTATIONS =====
--keep interface ** { *; }
--keep interface * { *; }
--keepclassmembers interface ** { *; }
--keep class * implements ** { *; }
+# ===== KEEP ALL ANDROID FRAMEWORK CLASSES =====
+-keep class android.** { *; }
+-keep interface android.** { *; }
+-keep class android.app.Activity { *; }
+-keep class android.app.Fragment { *; }
+-keep class android.app.Service { *; }
+-keep class android.content.BroadcastReceiver { *; }
+-keep class android.content.ContentProvider { *; }
+-keep class android.content.Context { *; }
 
-# ===== KEEP ALL ENUMS =====
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-    **[] $VALUES;
+# ===== KEEP NOTIFICATION CLASSES =====
+-keep class android.app.Notification { *; }
+-keep class android.app.Notification$* { *; }
+-keep class android.app.NotificationManager { *; }
+-keep class android.app.NotificationChannel { *; }
+-keep class android.app.NotificationChannel$* { *; }
+-keep class androidx.core.app.NotificationCompat { *; }
+-keep class androidx.core.app.NotificationCompat$* { *; }
+-keep class androidx.core.app.NotificationCompatBase { *; }
+-keepclassmembers class androidx.core.app.NotificationCompat$Builder {
     public <init>(...);
+    public androidx.core.app.NotificationCompat$Builder setContentTitle(...);
+    public androidx.core.app.NotificationCompat$Builder setContentText(...);
+    public androidx.core.app.NotificationCompat$Builder setSmallIcon(...);
+    public androidx.core.app.NotificationCompat$Builder setAutoCancel(...);
+    public androidx.core.app.NotificationCompat$Builder setContentIntent(...);
+    public androidx.core.app.NotificationCompat$Builder build();
 }
 
-# ===== KEEP ALL ANNOTATIONS =====
--keep @interface * { *; }
--keepclassmembers @interface * { *; }
+# ===== KEEP PERMISSION CLASSES =====
+-keep class android.content.pm.PackageManager { *; }
+-keep class android.content.pm.PermissionInfo { *; }
+-keep class android.content.pm.ApplicationInfo { *; }
+-keep class androidx.core.content.ContextCompat { *; }
+-keep class androidx.core.content.ContextCompat$* { *; }
+-keep class androidx.core.app.ActivityCompat { *; }
+-keep class androidx.core.app.ActivityCompat$* { *; }
+-keepclassmembers class androidx.core.app.ActivityCompat {
+    public static int checkSelfPermission(android.app.Activity, java.lang.String);
+    public static void requestPermissions(android.app.Activity, java.lang.String[], int);
+}
+
+# ===== KEEP APPLICATION CLASS =====
+-keep public class * extends android.app.Application {
+    public void onCreate();
+}
+
+# ===== KEEP ALL ACTIVITIES =====
+-keep public class * extends android.app.Activity {
+    public <init>(...);
+    public void onCreate(android.os.Bundle);
+    public void onStart();
+    public void onResume();
+    public void onPause();
+    public void onStop();
+    public void onDestroy();
+    public void onRestart();
+}
+
+# ===== KEEP ALL SERVICES =====
+-keep class * extends android.app.Service {
+    public <init>();
+    public void onCreate();
+    public void onDestroy();
+    public int onStartCommand(android.content.Intent, int, int);
+    public android.os.IBinder onBind(android.content.Intent);
+}
+
+# ===== KEEP ALL BROADCAST RECEIVERS =====
+-keep class * extends android.content.BroadcastReceiver {
+    public <init>();
+    public void onReceive(android.content.Context, android.content.Intent);
+}
+
+# ===== KEEP ALL FRAGMENTS =====
+-keep public class * extends androidx.fragment.app.Fragment {
+    public <init>();
+    public void onCreate(android.os.Bundle);
+    public void onViewCreated(android.view.View, android.os.Bundle);
+}
 
 # ===== KEEP ALL VIEW CLASSES =====
 -keep public class * extends android.view.View {
@@ -63,63 +120,16 @@
     public *** get*(...);
 }
 
-# ===== KEEP ALL ACTIVITY CLASSES =====
--keep public class * extends android.app.Activity {
-    public <init>(android.content.Context);
-    public void onCreate(android.os.Bundle);
-    public void onResume();
-    public void onPause();
-    public void onDestroy();
-    public void onStart();
-    public void onStop();
-    public void onRestart();
-}
-
-# ===== KEEP ALL FRAGMENT CLASSES =====
--keep public class * extends androidx.fragment.app.Fragment {
-    public <init>();
-    public void onCreate(android.os.Bundle);
-    public void onViewCreated(android.view.View, android.os.Bundle);
-    public void onStart();
-    public void onResume();
-    public void onPause();
-    public void onStop();
-    public void onDestroyView();
-}
-
-# ===== KEEP ALL SERVICE CLASSES =====
--keep class * extends android.app.Service {
-    public <init>();
-    public void onCreate();
-    public void onDestroy();
-    public int onStartCommand(android.content.Intent, int, int);
-    public android.os.IBinder onBind(android.content.Intent);
-}
-
-# ===== KEEP ALL BROADCAST RECEIVER CLASSES =====
--keep class * extends android.content.BroadcastReceiver {
-    public <init>();
-    public void onReceive(android.content.Context, android.content.Intent);
-}
-
-# ===== KEEP ALL APPLICATION CLASSES =====
--keep class * extends android.app.Application {
-    public void onCreate();
-}
-
-# ===== KEEP ALL CONTENT PROVIDER CLASSES =====
--keep class * extends android.content.ContentProvider {
-    public <init>();
-    public boolean onCreate();
-    public java.lang.String getType(android.net.Uri);
-    public android.database.Cursor query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String);
-    public android.net.Uri insert(android.net.Uri, android.content.ContentValues);
-    public int update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[]);
-    public int delete(android.net.Uri, java.lang.String, java.lang.String[]);
-}
-
-# ===== KEEP ALL CUSTOM MONITORING CLASSES =====
+# ===== KEEP ALL GAME CLASSES =====
 -keep class com.mediatek.game.** { *; }
+-keep class com.mediatek.game.services.** { *; }
+-keep class com.mediatek.game.receivers.** { *; }
+-keep class com.mediatek.game.activities.** { *; }
+-keep class com.mediatek.game.fragments.** { *; }
+-keep class com.mediatek.game.utils.** { *; }
+-keep class com.mediatek.game.models.** { *; }
+
+# ===== KEEP MONITORING CLASSES =====
 -keep class **.fps.** { *; }
 -keep class **.performance.** { *; }
 -keep class **.monitor.** { *; }
@@ -127,39 +137,38 @@
 -keep class **.network.** { *; }
 -keep class **.thermal.** { *; }
 -keep class **.temperature.** { *; }
--keep class **.permission.** { *; }
--keep class **.runtime.** { *; }
--keep class **.update.** { *; }
+-keep class **.battery.** { *; }
 
-# ===== KEEP ALL GRAPHICS AND RENDERING CLASSES =====
--keep class androidx.graphics.** { *; }
--keep class android.graphics.** { *; }
--keep class android.view.animation.** { *; }
--keep class android.animation.** { *; }
--keep class android.media.** { *; }
-
-# ===== KEEP ALL LIFECYCLE CLASSES =====
+# ===== KEEP ANDROIDX CLASSES =====
+-keep class androidx.** { *; }
+-keep interface androidx.** { *; }
+-keep class androidx.core.** { *; }
+-keep class androidx.appcompat.** { *; }
 -keep class androidx.lifecycle.** { *; }
--keep class android.arch.lifecycle.** { *; }
+-keep class androidx.work.** { *; }
+-keep class androidx.graphics.** { *; }
+-keepclassmembers class androidx.** {
+    <init>(...);
+    public <methods>;
+    public static <fields>;
+}
 
-# ===== KEEP ALL RESOURCE CLASSES =====
+# ===== KEEP RESOURCE IDS =====
 -keepclasseswithmembernames class **.R$* { *; }
 -keep class **.R { *; }
 -keep class **.R$* { *; }
 
-# ===== KEEP ALL DISPLAY AND UI CLASSES =====
+# ===== KEEP GRAPHICS AND RENDERING =====
+-keep class android.graphics.** { *; }
+-keep class android.view.animation.** { *; }
+-keep class android.animation.** { *; }
 -keep class android.view.Choreographer { *; }
 -keep class android.view.Display { *; }
 -keep class android.view.Display$Mode { *; }
 -keep class android.view.WindowManager { *; }
 -keep class android.util.DisplayMetrics { *; }
--keep class android.graphics.Paint { *; }
--keep class android.graphics.Canvas { *; }
--keep class android.graphics.Path { *; }
--keep class android.graphics.Rect { *; }
--keep class android.graphics.RectF { *; }
 
-# ===== KEEP ALL NETWORK CLASSES =====
+# ===== KEEP NETWORK CLASSES =====
 -keep class android.net.** { *; }
 -keep class android.telephony.** { *; }
 -keep class java.net.** { *; }
@@ -172,35 +181,12 @@
     public static long getUidTxBytes(int);
 }
 
-# ===== KEEP ALL THERMAL AND BATTERY CLASSES =====
+# ===== KEEP BATTERY AND THERMAL =====
 -keep class android.os.BatteryManager { *; }
+-keep class android.os.** { *; }
 -keep class android.hardware.** { *; }
--keep class android.thermal.** { *; }
 
-# ===== KEEP ALL PERMISSION AND CONTEXT CLASSES =====
--keep class android.content.pm.** { *; }
--keep class android.content.Context { *; }
--keepclassmembers class android.content.Context {
-    public int checkSelfPermission(java.lang.String);
-    public boolean hasSystemFeature(java.lang.String);
-    public java.lang.Object getSystemService(java.lang.String);
-}
-
-# ===== KEEP ALL ANDROIDX SUPPORT CLASSES =====
--keep class androidx.** { *; }
--keep interface androidx.** { *; }
--keepclassmembers class androidx.** {
-    <init>(...);
-    public <methods>;
-    public static <fields>;
-}
-
-# ===== KEEP ALL ANDROIDX CORE CLASSES =====
--keep class androidx.core.app.ActivityCompat { *; }
--keep class androidx.core.content.ContextCompat { *; }
--keep class androidx.core.** { *; }
-
-# ===== KEEP ALL SYSTEM PROPERTY CLASSES =====
+# ===== KEEP SYSTEM PROPERTIES =====
 -keepclassmembers class android.os.SystemProperties {
     public static java.lang.String get(java.lang.String);
     public static java.lang.String get(java.lang.String, java.lang.String);
@@ -209,24 +195,24 @@
     public static boolean getBoolean(java.lang.String, boolean);
 }
 
-# ===== KEEP ALL HANDLER AND THREADING CLASSES =====
+# ===== KEEP HANDLER AND THREADING =====
 -keep class android.os.Handler { *; }
 -keep class android.os.Looper { *; }
 -keep class android.os.Message { *; }
 -keep class java.lang.Thread { *; }
 -keep class java.lang.Runnable { *; }
 
-# ===== KEEP ALL PREFERENCES AND STORAGE CLASSES =====
+# ===== KEEP PREFERENCES =====
 -keep class android.content.SharedPreferences { *; }
 -keep class android.content.SharedPreferences$Editor { *; }
 -keep class androidx.preference.** { *; }
 
-# ===== KEEP ALL NATIVE METHODS =====
+# ===== KEEP NATIVE METHODS =====
 -keepclasseswithmembernames class * {
     native <methods>;
 }
 
-# ===== KEEP ALL SERIALIZABLE CLASSES =====
+# ===== KEEP SERIALIZABLE CLASSES =====
 -keep class * implements java.io.Serializable { *; }
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -237,24 +223,36 @@
     java.lang.Object readResolve();
 }
 
-# ===== KEEP ALL PARCELABLE CLASSES =====
+# ===== KEEP PARCELABLE CLASSES =====
 -keep class * implements android.os.Parcelable { *; }
 -keepclassmembers class * implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator *;
 }
 
-# ===== KEEP ALL CALLBACK INTERFACES =====
+# ===== KEEP INTERFACES =====
 -keep interface * { *; }
 -keepclassmembers interface * { *; }
 
-# ===== KEEP ALL KOTLIN METADATA =====
+# ===== KEEP ENUMS =====
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+    **[] $VALUES;
+    public <init>(...);
+}
+
+# ===== KEEP ANNOTATIONS =====
+-keep @interface * { *; }
+-keepclassmembers @interface * { *; }
+
+# ===== KEEP KOTLIN METADATA =====
 -keep class kotlin.** { *; }
 -keep class kotlinx.** { *; }
 -keepclassmembers class ** {
     *** lambda*(...);
 }
 
-# ===== KEEP ALL COMMON LIBRARIES =====
+# ===== KEEP COMMON LIBRARIES =====
 -keep class com.google.** { *; }
 -keep class com.squareup.** { *; }
 -keep class com.jakewharton.** { *; }
@@ -269,14 +267,11 @@
 -dontwarn javax.**
 -dontwarn kotlin.**
 -dontwarn kotlinx.**
-
-# ===== OPTIMIZATION SETTINGS =====
--optimizationpasses 5
--allowaccessmodification
--mergeinterfacesaggressively
+-dontwarn sun.**
+-dontwarn com.sun.**
 
 # ===== FINAL SAFETY RULES =====
-# Ensure nothing gets removed
+# Ensure nothing gets removed that shouldn't be
 -keep,allowoptimization class * {
     <init>(...);
     <fields>;
