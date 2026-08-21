@@ -86,10 +86,10 @@ public class BackgroundProcessOptimizer {
     
     private void optimizeAppProcess(String processName, int pid) {
         try {
-            // Use setThreadScheduler instead - available since API 28
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                android.os.Process.setThreadScheduler(pid, 
-                    android.os.Process.SCHED_BATCH, 0);
+            // Use setProcessGroup for background optimization
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                android.os.Process.setProcessGroup(pid, 
+                    android.os.Process.THREAD_GROUP_BG_NONINTERACTIVE);
             }
         } catch (Exception e) {
             e.printStackTrace();
