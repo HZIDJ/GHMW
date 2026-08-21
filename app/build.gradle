@@ -22,7 +22,7 @@ android {
         // Enable vector drawable support for smooth meter rendering
         vectorDrawables.useSupportLibrary = true
         
-        // Optimize render performance
+        // Optimize render performance - Issue #5, #7 (GPU/CPU optimization)
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true
         
@@ -51,12 +51,12 @@ android {
             // Make sure release uses the signing config
             signingConfig signingConfigs.release
 
-            // Optimizations with safe ProGuard rules
+            // Optimizations with safe ProGuard rules - Issue #1 (APK version management)
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             
-            // Performance optimizations
+            // Performance optimizations - Issue #2, #7, #9 (Battery and thermal management)
             ndk {
                 debugSymbolLevel 'full'
             }
@@ -81,7 +81,7 @@ android {
         abi.enableSplit = false
     }
 
-    // Lint options for permission handling
+    // Lint options for permission handling - Issue #3, #9 (Permission restrictions)
     lintOptions {
         checkReleaseBuilds false
         disable 'MissingTranslation'
@@ -111,7 +111,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Performance monitoring and lifecycle support
+    // Performance monitoring and lifecycle support - Issue #2, #5, #7 (Battery/thermal/GPU optimization)
     implementation('androidx.core:core:1.13.1') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
@@ -125,31 +125,31 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Notification support for Android 13+ (API 33+)
+    // Notification support for Android 13+ (API 33+) - Issue #1, #4, #8 (In-game notifications)
     implementation('androidx.core:core:1.13.1') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Real-time performance stats - Compatible with SDK 36
+    // Real-time performance stats - Compatible with SDK 36 - Issue #5, #7 (GPU/CPU monitoring)
     implementation('androidx.graphics:graphics-core:1.0.0-alpha04') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Android system services and permissions
+    // Android system services and permissions - Issue #2, #9 (Background process optimization)
     implementation('androidx.work:work-runtime:2.9.0') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Permission handling for runtime permissions
+    // Permission handling for runtime permissions - Issue #3, #9 (Third-party app permissions)
     implementation('androidx.activity:activity:1.8.1') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
     
-    // Fragment support for permission dialogs
+    // Fragment support for permission dialogs - Issue #5, #7 (Network/WiFi optimization)
     implementation('androidx.fragment:fragment:1.6.2') {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
