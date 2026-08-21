@@ -10,19 +10,23 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     
-    <!-- Notification permissions (Android 13+ / API 33+) -->
+    <!-- Notification permissions (Android 13+ / API 33+) - Issue #1, #4, #8 -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
-    <!-- Performance monitoring permissions -->
+    <!-- Performance monitoring permissions - Issue #2, #5, #7 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
     
-    <!-- Battery and thermal monitoring -->
+    <!-- Battery and thermal monitoring - Issue #2, #7, #9 -->
     <uses-permission android:name="android.permission.BATTERY_STATS" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
     
-    <!-- Memory and process monitoring -->
+    <!-- Memory and process monitoring - Issue #2, #9 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
+    
+    <!-- WiFi optimization - Issue #5, #7, #9 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:name="com.mediatek.game.GameApplication"
@@ -30,7 +34,8 @@
         android:label="Game Helio G100"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="false">
 
         <meta-data
             android:name="com.mediatek.game.GAMEPLAY_ACTIVITY"
@@ -41,7 +46,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -55,17 +60,20 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
-        <!-- Gameplay activity -->
+        <!-- Gameplay activity - Issue #8 (120Hz support) -->
         <activity 
             android:name=".GameplayActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
+            android:preferMinimalPostProcessing="true" />
 
-        <!-- Notification channels metadata -->
+        <!-- Services - Issue #1-9 -->
         <service android:name=".services.NotificationService" />
         <service android:name=".services.PerformanceMonitorService" />
         <service android:name=".services.PermissionService" />
+        <service android:name=".services.BatteryOptimizationService" 
+            android:exported="false" />
 
         <!-- Broadcast receivers for system events -->
         <receiver
@@ -73,6 +81,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_CHANGED" />
+                <action android:name="android.intent.action.BATTERY_LOW" />
             </intent-filter>
         </receiver>
 
