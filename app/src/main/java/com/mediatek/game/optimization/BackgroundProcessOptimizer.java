@@ -90,7 +90,8 @@ public class BackgroundProcessOptimizer {
     private void optimizeAppProcess(String processName, int pid) {
         try {
             // Use setProcessGroup for background optimization
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            // setProcessGroup was added in Android 5.0 (API 21)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 android.os.Process.setProcessGroup(pid, THREAD_GROUP_BG_NONINTERACTIVE);
             }
         } catch (Exception e) {
