@@ -37,7 +37,6 @@ public class NotificationManager {
                 android.app.NotificationManager.IMPORTANCE_DEFAULT);
             
             normalChannel.setDescription("Normal game notifications");
-            normalChannel.enableSound(true);
             normalChannel.enableVibration(true);
             
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -57,7 +56,6 @@ public class NotificationManager {
                 android.app.NotificationManager.IMPORTANCE_HIGH);
             
             urgentChannel.setDescription("Urgent game alerts");
-            urgentChannel.enableSound(true);
             urgentChannel.enableVibration(true);
             urgentChannel.setVibrationPattern(new long[]{0, 250, 250, 250});
             
