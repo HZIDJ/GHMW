@@ -17,6 +17,9 @@ public class BackgroundProcessOptimizer {
     private PackageManager packageManager;
     private ActivityManager activityManager;
     
+    // Define THREAD_GROUP_BG_NONINTERACTIVE constant (value: 1)
+    private static final int THREAD_GROUP_BG_NONINTERACTIVE = 1;
+    
     public BackgroundProcessOptimizer(Context context) {
         this.context = context;
         this.packageManager = context.getPackageManager();
@@ -88,8 +91,7 @@ public class BackgroundProcessOptimizer {
         try {
             // Use setProcessGroup for background optimization
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                android.os.Process.setProcessGroup(pid, 
-                    android.os.Process.THREAD_GROUP_BG_NONINTERACTIVE);
+                android.os.Process.setProcessGroup(pid, THREAD_GROUP_BG_NONINTERACTIVE);
             }
         } catch (Exception e) {
             e.printStackTrace();
