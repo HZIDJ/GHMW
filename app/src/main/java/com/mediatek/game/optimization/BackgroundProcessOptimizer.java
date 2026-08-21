@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import java.util.List;
+import java.lang.reflect.Method;
 
 /**
  * Background Process Optimizer - Issue #2, #9
@@ -89,10 +90,18 @@ public class BackgroundProcessOptimizer {
     
     private void optimizeAppProcess(String processName, int pid) {
         try {
-            // Use setProcessGroup for background optimization
+            // Use reflection to safely call setProcessGroup if available
             // setProcessGroup was added in Android 5.0 (API 21)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                android.os.Process.setProcessGroup(pid, THREAD_GROUP_BG_NONINTERACTIVE);
+                try {
+                    Method setProcessGroup = android.os.Process.class.getMethod(
+                        "setProcessGroup", int.class, int.class);
+                    setProcessGroup.invoke(null, pid, THREAD_GROUP_BG_NONINTERACTIVE);
+                } catch (NoSuchMethodException e) {
+                    // Method not available on this device/API level
+                    android.util.Log.w("BackgroundProcessOptimizer", 
+                        "setProcessGroup not available: " + e.getMessage());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
